@@ -1,29 +1,38 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import {Request, Response} from "express"
+
 
 export class App{
     app = express();
+    
 
-    constructor(){
+    constructor(controllers){
         console.log("constructor");
         this.InitializeMiddlware();
-        this.InitializeRoutes();
+        this.InitializeControllers(controllers);
+
+
     }
 
-    InitializeMiddlware(){
+    private InitializeMiddlware(){
         console.log("InitializeMiddlware");
         this.app.use(bodyParser.json())
     }
 
-    InitializeRoutes(){
-        console.log("InitializeRoutes");
-        this.app.get("/butthead", (req:Request, res:Response)=>{
-            return res.send('fu fu fu');
+    private InitializeControllers(controllers){
+        console.log("InitializeControllers");
+
+        controllers.forEach(controller => {
+            this.app.use('/', controller.router);
+            
         });
+        
+        
     }
+
+    
 
 }
 
-const app = new App();
-app.app.listen(3000);
+// const app = new App();
+// app.app.listen(3000);
